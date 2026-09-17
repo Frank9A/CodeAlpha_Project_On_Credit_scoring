@@ -2,8 +2,7 @@ import pandas as pd
 from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, roc_auc_score
 import joblib
 
 # 1. Fetch the german credit dataset from OpenML repository
@@ -66,3 +65,8 @@ print("\nModel saved as credit_model.pkl")
 # 14. Save the exact column names so our API knows how to format new data
 joblib.dump(list(X_encoded.columns), 'model_columns.pkl')
 print("Model columns saved as model_columns.pkl")
+
+# 15. Calculate and print ROC-AUC Score
+probabilities = model.predict_proba(X_test)[:, 1] # Get probabilities for the "Good Risk" class
+roc_auc = roc_auc_score(y_test, probabilities)
+print(f"\nROC-AUC Score: {roc_auc:.4f}")
